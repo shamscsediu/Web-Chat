@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from common.services import get_tokens_for_user, format_response
+from user.models import UserMovie
 from user.serializers import *
 
 
@@ -60,3 +61,18 @@ class UserAuthenticate(APIView):
                 return Response(format_response([], 'Not Found', 404), status=status.HTTP_404_NOT_FOUND)
         else:
             return Response(format_response(serializer.errors, 'Bad Request', 400), status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserMovieList(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, format=None):
+        user = request.user
+        movies = user.user_movies.all()
+        return Response(format_response(UserMoviesSerializers(movies, many=True).data, 'Success', 200), status=status.HTTP_200_OK)
+
+    def post(self, request, format=None):
+        user = request.user
+        movie = request.data.get('movie')
+        UserMovie.objects.create(user=user, movie=movie)
+        return Response(format_response([], 'Success', 200), status=status.HTTP_200_OK)

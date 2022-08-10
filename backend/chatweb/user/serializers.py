@@ -2,6 +2,8 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework.validators import UniqueTogetherValidator, UniqueValidator
 
+from user.models import UserMovie
+
 
 class UserSerializer(serializers.ModelSerializer):
     email = serializers.CharField(max_length=255, validators=[
@@ -24,3 +26,9 @@ class UserAuthenticateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['email', 'password']
+
+
+class UserMoviesSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = UserMovie
+        fields = ['id', 'user', 'movie']
