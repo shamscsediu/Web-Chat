@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import make_password
+from django.db.models import Q
 from django.utils import timezone
 from rest_framework import permissions
 from rest_framework import status
@@ -69,10 +70,21 @@ class UserMovieList(APIView):
     def get(self, request, format=None):
         user = request.user
         movies = user.user_movies.all()
-        return Response(format_response(UserMoviesSerializers(movies, many=True).data, 'Success', 200), status=status.HTTP_200_OK)
+        return Response(format_response(UserMoviesSerializers(movies, many=True).data, 'Success', 200),
+                        status=status.HTTP_200_OK)
 
     def post(self, request, format=None):
         user = request.user
         movie = request.data.get('movie')
         UserMovie.objects.create(user=user, movie=movie)
         return Response(format_response([], 'Success', 200), status=status.HTTP_200_OK)
+
+
+class UserSearch(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, format=None):
+        term = request.query_params.get('term')
+        users = User.objects.filter(Q(first_name__icontains=term) | Q(last_name__icontains=term)).order_by('id') if term else []
+        return Response(format_response(UserDataSerializer(users, many=True).data, 'Success', 200),
+                        status=status.HTTP_200_OK)

@@ -35,7 +35,7 @@ body,html{
     align-content: center;
 }
 .search{
-    border-radius: 15px 0 0 15px !important;
+    border-radius: 10px !important;
     background-color: rgba(0,0,0,0.3) !important;
     border:0 !important;
     color:white !important;

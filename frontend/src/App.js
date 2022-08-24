@@ -2,7 +2,6 @@ import React from "react";
 import "./assets/vendor/bootstrap/css/bootstrap.min.css";
 import "./App.css";
 import Layout from "./layouts/Layout";
-import Chat from "./components/chat";
 
 
 const App = () => {

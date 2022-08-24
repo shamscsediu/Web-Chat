@@ -10,4 +10,5 @@ urlpatterns = [
 
     # After authentication
     path('user/movies', views.UserMovieList.as_view()),
+    path('user/search', views.UserSearch.as_view()),
 ]

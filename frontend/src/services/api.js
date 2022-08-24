@@ -47,7 +47,7 @@ instance.interceptors.response.use(
     }
     refresh = false;
     console.log("refresh token failed");
-    TokenService.removeUser();
+    // TokenService.removeUser();
     window.location.reload();
     return Promise.reject(err);
   }

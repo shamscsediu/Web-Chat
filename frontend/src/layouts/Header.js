@@ -39,7 +39,7 @@ const Header = () => {
                         </li>
                         <li className="nav-item">
                             <Link to={"/dashboard"} className="nav-link">
-                                {currentUser.username}
+                                {currentUser?.username}
                             </Link>
                         </li>
                         <li className="nav-item">
