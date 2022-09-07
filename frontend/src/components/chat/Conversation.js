@@ -1,23 +1,38 @@
 import React, {useState} from 'react';
 import {useSelector} from "react-redux";
-import Receiver from "./Receiver";
-import Sender from "./Sender";
 import ConversationFooter from "./ConversationFooter";
+import ActiveStatus from "./ActiveStatus";
+import Loader from "../Loader/Loader";
+import ConversationBody from "./ConversationBody";
+import {useNavigate} from "react-router-dom";
 
-const Conversation = () => {
-    const message = useSelector((state => state.message));
-    const {user: currentUser} = useSelector((state) => state.auth);
-    console.log(currentUser)
+const Conversation = ({}) => {
+    const message = useSelector(state => state.message);
+    const user = useSelector(state => state.user);
+    const [isHidden, setIsHidden] =useState(false)
+    const navigate = useNavigate();
+    const handleClick = (e) => {
+        e.preventDefault();
+        navigate('/profile/'+message.receiver.id);
+    }
+
     return (
         <div className="col-md-8 col-xl-6 chat">
-            {message.messages.length > 0 ?
+            {message.loading && <Loader/>}
+            {message.messages?.length > 0 || message.receiver.id ?
                 <div className="card">
                     <div className="card-header msg_head">
                         <div className="d-flex bd-highlight justify-content-between">
-                            <div className="img_cont">
-                                <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"
-                                     className="rounded-circle user_img"/>
-                                <span className="online_icon"></span>
+                            {/*<div className="img_cont">*/}
+                            {/*    <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"*/}
+                            {/*         className="rounded-circle user_img"/>*/}
+                            {/*    <ActiveStatus contact={message.receiver}/>*/}
+                            {/*</div>*/}
+                            <div className="circle-img rounded-circle img_cont">
+                                <div className="name-inside fs-28">
+                                    {(message.receiver.first_name?.charAt(0)+message.receiver.last_name?.charAt(0)).toUpperCase()}
+                                </div>
+                                    <ActiveStatus contact={message.receiver}/>
                             </div>
 
                             <div className="user_info">
@@ -29,34 +44,24 @@ const Conversation = () => {
                                 <span><i className="fas fa-phone"></i></span>
                             </div>
                         </div>
-                        <span id="action_menu_btn"><i className="fas fa-ellipsis-v"></i></span>
-                        <div className="action_menu">
+                        <span id="action_menu_btn" onClick={() => setIsHidden(!isHidden)}><i className="fas fa-ellipsis-v"></i></span>
+                        {isHidden && <div className="action_menu">
                             <ul>
-                                <li><i className="fas fa-user-circle"></i> View profile</li>
+                                <li onClick={handleClick}><i className="fas fa-user-circle"></i>View profile</li>
                                 <li><i className="fas fa-users"></i> Add to close friends</li>
                                 <li><i className="fas fa-plus"></i> Add to group</li>
                                 <li><i className="fas fa-ban"></i> Block</li>
                             </ul>
-                        </div>
+                        </div>}
                     </div>
-                    <div className="card-body msg_card_body">
-                        {message.messages.map((msg) => {
-                            console.log("new",msg)
-                            if (msg.user.id === currentUser.id) {
-                                return <Sender key={msg.id} msg={msg}/>
-                            } else {
-                                return <Receiver key={msg.id} msg={msg}/>
-                            }
-                        })
-                        }
+                    <ConversationBody message={message} user={user.userData}/>
 
-                    </div>
-                    <ConversationFooter receiver={message.receiver.id}/>
+                    <ConversationFooter receiver={message.receiver} message={message} user={user.userData}/>
                 </div> :
                 <div className="card d-flex align-items-center justify-content-center">
-                    <div className="text-light">
+                    {!message.loading && <div className="text-light">
                         Please start a conversation to see content here
-                    </div>
+                    </div>}
                 </div>}
         </div>
     );

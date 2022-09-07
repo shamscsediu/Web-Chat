@@ -8,6 +8,8 @@ from user.models import UserMovie
 class UserSerializer(serializers.ModelSerializer):
     email = serializers.CharField(max_length=255, validators=[
         UniqueValidator(queryset=User.objects.all(), message='A user with that email already exists.')])
+    username = serializers.CharField(max_length=255, validators=[
+        UniqueValidator(queryset=User.objects.all(), message='A user with that username already exists.')])
 
     class Meta:
         model = User

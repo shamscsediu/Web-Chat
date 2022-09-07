@@ -23,7 +23,7 @@ class MessageSerializer(serializers.ModelSerializer):
 
 
 class MessageCreateSerializer(serializers.ModelSerializer):
-    attachments = serializers.FileField(allow_empty_file=True, use_url=True, required=False)
+    attachments = serializers.FileField(allow_empty_file=True, required=False)
 
     class Meta:
         model = Message
@@ -48,4 +48,17 @@ class ConversationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Message
-        fields = ('id', 'user', 'content', 'attachments', 'created_at', 'updated_at')
+        fields = ('id', 'user', 'content', 'status', 'attachments', 'created_at', 'updated_at')
+
+# class ContactSerializer(serializers.ModelSerializer):
+#     user = serializers.SerializerMethodField()
+#
+#     def get_user(self, obj):
+#         users_list_1 = Message.objects.filter(receiver=self.user).values_list('sender_id', flat=True).distinct()
+#         users_list_2 = Message.objects.filter(sender=self.user).values_list('receiver_id', flat=True).distinct()
+#         users_list = list(users_list_1) + list(users_list_2)
+#         return UserDataSerializer(obj.sender).data
+#
+#     class Meta:
+#         model = Message
+#         fields = ('id', 'user', 'status', 'created_at', 'updated_at')

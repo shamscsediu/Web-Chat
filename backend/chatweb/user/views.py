@@ -24,7 +24,7 @@ class UserRegister(APIView):
             'password': make_password(request.data.get('password')),
             'is_active': True
         }
-
+        print(user)
         user_serializer = UserSerializer(data=user)
         if user_serializer.is_valid():
             user = user_serializer.save()
@@ -85,6 +85,7 @@ class UserSearch(APIView):
 
     def get(self, request, format=None):
         term = request.query_params.get('term')
-        users = User.objects.filter(Q(first_name__icontains=term) | Q(last_name__icontains=term)).order_by('id') if term else []
+        users = User.objects.filter(Q(first_name__icontains=term) | Q(last_name__icontains=term)).order_by(
+            'id') if term else []
         return Response(format_response(UserDataSerializer(users, many=True).data, 'Success', 200),
                         status=status.HTTP_200_OK)

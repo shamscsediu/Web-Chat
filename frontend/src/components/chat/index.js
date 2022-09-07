@@ -1,12 +1,16 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import '../../assets/vendor/bootstrap/css/bootstrap.min.css';
 import './css/main.css';
 import {Helmet} from "react-helmet";
 import SearchUser from "./SearchUser";
 import Conversation from "./Conversation";
 import ChatSidebar from "./ChatSidebar";
+import {useDispatch, useSelector} from "react-redux";
+import {updateUser} from "../../redux/userSlice";
+import {useLocation} from "react-router-dom";
+import socket from "../../configs/socketConfig";
 
-const Chat = () => {
+const Chat = (props) => {
 
     return (
         <div className="container-fluid h-100 mt-5">

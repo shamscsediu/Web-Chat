@@ -1,18 +1,46 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {Link} from "react-router-dom";
 import {logout} from "../actions/auth";
 import {clearMessage} from "../actions/message";
 import {history} from "../helpers/history";
+import {updateOnlineUser, updateUser} from "../redux/userSlice";
+import AuthService from "../services/authService";
+import {io} from "socket.io-client";
+import socket from "../configs/socketConfig";
 
 const Header = () => {
-    const { user: currentUser } = useSelector((state) => state.auth);
+    const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
+    useEffect(() => {
+        if (user) {
+            const currUser = AuthService.getCurrentUser();
+            console.log(currUser)
+            if (currUser) {
+                dispatch(updateUser(currUser));
+            }
+        }
+
+    }, [])
     useEffect(() => {
         history.listen((location) => {
             dispatch(clearMessage()); // clear message when changing location
         });
     }, [dispatch]);
+
+
+    useEffect(() => {
+        if (user) {
+            socket?.emit("newUser", user.userData);
+        }
+
+    }, [socket, user.userData]);
+
+    useEffect(() => {
+        socket?.on("getOnlineUsers", (data) => {
+            dispatch(updateOnlineUser(data));
+        });
+    }, [socket])
     const logOut = () => {
         dispatch(logout());
     };
@@ -30,7 +58,7 @@ const Header = () => {
                     </li>
 
                 </div>
-                {currentUser ? (
+                {user.userData ? (
                     <div className="navbar-nav ml-auto">
                         <li className="nav-item">
                             <Link to={"/message"} className="nav-link">
@@ -38,8 +66,8 @@ const Header = () => {
                             </Link>
                         </li>
                         <li className="nav-item">
-                            <Link to={"/dashboard"} className="nav-link">
-                                {currentUser?.username}
+                            <Link to={"/profile"} className="nav-link">
+                                {user.userData.username}
                             </Link>
                         </li>
                         <li className="nav-item">

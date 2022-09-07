@@ -22,6 +22,8 @@ body,html{
 }
 .msg_card_body{
     overflow-y: auto;
+    display: flex;
+    flex-direction: column-reverse;
 }
 .card-header{
     border-radius: 15px 15px 0 0 !important;
@@ -119,6 +121,16 @@ body,html{
     right: 0.4em;
     border:1.5px solid white;
 }
+.offline_icon{
+    position: absolute;
+    height: 15px;
+    width:15px;
+    background-color: #d1a537;
+    border-radius: 50%;
+    bottom: 0.2em;
+    right: 0.4em;
+    border:1.5px solid white;
+}
 .offline{
     background-color: #c23616 !important;
 }
@@ -153,6 +165,11 @@ body,html{
     background-color: #82ccdd;
     padding: 10px;
     position: relative;
+    animation: slide-up 0.4s ease;
+
+}
+.typing-stat{
+    order: -1;
 }
 .msg_cotainer_send{
     margin-top: auto;
@@ -162,6 +179,7 @@ body,html{
     background-color: #78e08f;
     padding: 10px;
     position: relative;
+    animation: slide-up 0.4s ease;
 }
 .msg_time{
     position: absolute;
@@ -183,7 +201,7 @@ body,html{
 #action_menu_btn{
     position: absolute;
     right: 10px;
-    top: 10px;
+    top: 18px;
     color: white;
     cursor: pointer;
     font-size: 20px;
@@ -197,7 +215,6 @@ body,html{
     border-radius: 15px;
     top: 30px;
     right: 15px;
-    display: none;
 }
 .action_menu ul{
     list-style: none;
@@ -217,8 +234,62 @@ body,html{
     cursor: pointer;
     background-color: rgba(0,0,0,0.2);
 }
+
+/*Custom css*/
+.circle-img {
+    border: 1px solid #f5f6fa;
+    background: rgba(86, 70, 210, 0.57);
+    display: grid;
+    place-items: center;
+}
+.name-inside {
+    width: 100%;
+    text-align: center;
+    color: white;
+}
+.unread_box{
+    display: grid;
+    place-items: center;
+    margin-bottom: 16px;
+    background-color: beige;
+    border-radius: 10px;
+}
+.cover_hero{
+    min-height: 50vh;
+    background-color: rgba(0,0,0,0.4) !important;
+    position: relative;
+    border-bottom: 1px solid #73a7bd;
+    animation: slide-up 0.4s ease;
+}
+.pro_pic_container{
+    position: absolute;
+    bottom: -40px;
+    background-color: #555db2 !important;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+    height: 200px;
+    width: 200px;
+}
+.u_info{
+    margin-top: 45px;
+}
+
 @media(max-width: 576px){
     .contacts_card{
         margin-bottom: 15px !important;
     }
 }
+@keyframes slide-up {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+

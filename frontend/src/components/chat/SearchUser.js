@@ -2,6 +2,8 @@ import React, {useState} from "react";
 import UserService from "../../services/userService";
 import {useDispatch} from "react-redux";
 import {getMessages} from "../../services/messageService";
+import {clearChatConversation} from "../../redux/messageSlice";
+import ActiveStatus from "./ActiveStatus";
 
 const SearchUser = () => {
     const [term, setTerm] = useState('');
@@ -17,6 +19,9 @@ const SearchUser = () => {
     }
     const handleClick =async (e, user) =>{
         e.preventDefault();
+        dispatch(clearChatConversation());
+        setUsers([])
+        setTerm('')
         await getMessages(user, dispatch);
     }
     return (
@@ -32,7 +37,13 @@ const SearchUser = () => {
             {users.length > 0 &&
                 <div className="list-group mt-1">
                     {users.map((user) => {
-                        return <li className="list-group-item" key={user.id}>
+                        return <li className="list-group-item d-flex" key={user.id}>
+                            <div className="circle-img rounded-circle img_cont_msg mr-2">
+                                <div className="name-inside">
+                                    {(user.first_name?.charAt(0)+user.last_name?.charAt(0)).toUpperCase()}
+                                </div>
+                                <ActiveStatus contact={user}/>
+                            </div>
                             <button onClick={(e) => handleClick(e, user)}>{user.first_name + ' ' + user.last_name}</button>
                         </li>
                     })}
