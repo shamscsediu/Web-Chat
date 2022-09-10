@@ -21,7 +21,7 @@ class Message(models.Model):
 
 class Media(models.Model):
     message = models.ForeignKey(Message, on_delete=models.CASCADE, related_name='medias')
-    media = models.FileField(upload_to='media/')
+    media = models.FileField(upload_to='message/')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
