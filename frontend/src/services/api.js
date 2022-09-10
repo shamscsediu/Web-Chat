@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { logout } from "../actions/auth";
 
 const instance = axios.create({
-  baseURL: "http://localhost:8000/api",
+  baseURL: process.env.REACT_APP_API_BASE_URL+ "/api",
   headers: {
     "Content-Type": "application/json",
   },

@@ -2,10 +2,9 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 import {Server} from "socket.io";
 const PORT = process.env.PORT || 3000;
-const IS_PROD = process.env.NODE_ENV === 'production'
 const io = new Server({
     cors: {
-        origin: IS_PROD? "" :"http://localhost:3000",
+        origin: process.env.BASE_URL,
     },
 });
 
